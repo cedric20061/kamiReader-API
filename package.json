@@ -1,0 +1,47 @@
+{
+  "name": "kamireader-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/main.js",
+    "dev": "ts-node-dev --respawn --loader ts-node/esm main.mts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^6.19.0",
+    "better-auth": "^1.3.34",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "module-alias": "^2.2.3",
+    "prisma": "^6.19.0",
+    "puppeteer": "^24.23.0"
+  },
+  "_moduleAliases": {
+    "@models": "dist/src/models",
+    "@controllers": "dist/src/controllers",
+    "@middlewares": "dist/src/middlewares",
+    "@routes": "dist/src/routes",
+    "@utils": "dist/src/utils",
+    "@config": "dist/src/config",
+    "@types": "dist/types.js",
+    "@lib": "dist/src/lib",
+    "@services": "dist/src/services"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.5",
+    "@types/jest": "^30.0.0",
+    "@types/module-alias": "^2.0.4",
+    "@types/node": "^24.10.1",
+    "@types/supertest": "^6.0.3",
+    "jest": "^30.2.0",
+    "supertest": "^7.1.4",
+    "ts-jest": "^29.4.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "dist",
+    "sourceMap": true,
+    "declaration": true, // Optional: generates declaration files
+    "emitDecoratorMetadata": true, // Optional: required for some decorators
+    "experimentalDecorators": true, // Optional: required for some decorators
+    "baseUrl": "./", // Définit la base de résolution des modules
+    "paths": {
+      "@models/*": ["src/models/*"],
+      "@controllers/*": ["src/controllers/*"],
+      "@routes/*": ["src/routes/*"],
+      "@config/*": ["src/config/*"],
+      "@utils/*": ["src/utils/*"],
+      "@middlewares/*": ["src/middlewares/*"],
+      "@types": ["types.ts"],
+      "@lib/*": ["src/lib/*"],
+      "@services/*": ["src/services/*"]
+    }
+  },
+  "include": ["src/**/*", "main.ts", "types.ts"],
+  "exclude": ["node_modules", "dist"]
+}

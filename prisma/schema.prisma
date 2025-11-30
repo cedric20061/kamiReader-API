@@ -1,3 +1,4 @@
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,64 +9,94 @@ datasource db {
 }
 
 model User {
-  id             String       @id @default(uuid())
-  username       String       @unique
-  email          String       @unique
-  password       String
-  favorites      Favorite[]
-  library        Library[]
-  preferences    Preference?
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-}
-
-model Manga {
-  id             String        @id @default(uuid())
-  title          String
-  author         String?
-  description    String?
-  coverImage     String?
-  genres         String[]
-  chapters       Chapter[]
-  favorites      Favorite[]
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-}
-
-model Chapter {
-  id             String     @id @default(uuid())
-  number         Int
-  title          String?
-  images         String[]   // URLs des pages
-  mangaId        String
-  manga          Manga      @relation(fields: [mangaId], references: [id])
-  createdAt      DateTime   @default(now())
+  id            String      @id @default(uuid())
+  name          String
+  email         String      @unique
+  password      String
+  preferences   Preference?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  emailVerified Boolean     @default(false)
+  image         String?
+  sessions      Session[]
+  accounts      Account[]
+  libraries     Library[]
+  
+  @@map("user")
 }
 
 model Library {
-  id             String     @id @default(uuid())
-  userId         String
-  mangaId        String
-  progress       Int        @default(0)
-  user           User       @relation(fields: [userId], references: [id])
-  manga          Manga      @relation(fields: [mangaId], references: [id])
-  addedAt        DateTime   @default(now())
+  id        String         @id @default(uuid())
+  userId    String         // <- PAS UNIQUE
+  user      User           @relation(fields: [userId], references: [id])
+  name      String         // nom de la playlist (ex: “favoris”, “à lire”, etc.)
+  mangas    LibraryItem[]
+  createdAt DateTime       @default(now())
 }
 
-model Favorite {
-  id             String     @id @default(uuid())
-  userId         String
-  mangaId        String
-  user           User       @relation(fields: [userId], references: [id])
-  manga          Manga      @relation(fields: [mangaId], references: [id])
-  createdAt      DateTime   @default(now())
+model LibraryItem {
+  id        String   @id @default(uuid())
+  libraryId String
+  slug      String
+  domain    String
+  progress  Int      @default(0)
+  addedAt   DateTime @default(now())
+
+  library   Library  @relation(fields: [libraryId], references: [id])
 }
 
 model Preference {
-  id             String     @id @default(uuid())
-  userId         String     @unique
-  theme          String?    // ex: "dark", "light"
-  language       String?    // ex: "fr", "en"
-  notifications  Boolean?   @default(true)
-  user           User       @relation(fields: [userId], references: [id])
+  id            String   @id @default(uuid())
+  userId        String   @unique
+  theme         String? // ex: "dark", "light"
+  language      String? // ex: "fr", "en"
+  notifications Boolean? @default(true)
+  user          User     @relation(fields: [userId], references: [id])
 }
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+
+  @@map("verification")
+}
+
+
