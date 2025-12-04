@@ -15,17 +15,15 @@ export const getPreferences = async (req: Request, res: Response) => {
 
     if (!preferences) {
       const pref = await prisma.preference.create({
-        data: {
-          userId,
-        },
+        data: { userId },
       });
-      res.status(201).json(pref);
+      return res.status(201).json(pref); // ✅ RETURN CRITIQUE
     }
 
-    res.json(preferences);
+    return res.json(preferences); // ✅ retour explicite
   } catch (e) {
     console.error("Erreur getPreferences:", e);
-    res
+    return res
       .status(500)
       .json({ message: "Erreur lors de la récupération des préférences." });
   }
@@ -33,7 +31,6 @@ export const getPreferences = async (req: Request, res: Response) => {
 
 /**
  * POST /preferences/:userId
- * Crée les préférences d'un utilisateur (si elles n'existent pas)
  */
 export const createPreferences = async (req: Request, res: Response) => {
   const { userId } = req.params;
@@ -59,10 +56,10 @@ export const createPreferences = async (req: Request, res: Response) => {
       },
     });
 
-    res.status(201).json(pref);
+    return res.status(201).json(pref);
   } catch (e) {
     console.error("Erreur createPreferences:", e);
-    res
+    return res
       .status(500)
       .json({ message: "Erreur lors de la création des préférences." });
   }
@@ -70,7 +67,6 @@ export const createPreferences = async (req: Request, res: Response) => {
 
 /**
  * PUT /preferences/:userId
- * Met à jour les préférences existantes
  */
 export const updatePreferences = async (req: Request, res: Response) => {
   const { userId } = req.params;
@@ -79,14 +75,15 @@ export const updatePreferences = async (req: Request, res: Response) => {
   try {
     const updatedPref = await prisma.preference.update({
       where: { userId },
-      data: {
-        theme,
-        language,
-        notifications,
-      },
+      data: { theme, language, notifications },
     });
-
-    res.json(updatedPref);
+    if (!updatedPref) {
+      const pref = await prisma.preference.create({
+        data: { userId },
+      });
+      return res.status(201).json(pref); // ✅ RETURN CRITIQUE
+    }
+    return res.json(updatedPref);
   } catch (e: any) {
     console.error("Erreur updatePreferences:", e);
 
@@ -94,13 +91,12 @@ export const updatePreferences = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "Préférences introuvables." });
     }
 
-    res.status(500).json({ message: "Erreur lors de la mise à jour." });
+    return res.status(500).json({ message: "Erreur lors de la mise à jour." });
   }
 };
 
 /**
  * DELETE /preferences/:userId
- * Supprime les préférences d'un utilisateur
  */
 export const deletePreferences = async (req: Request, res: Response) => {
   const { userId } = req.params;
@@ -110,10 +106,10 @@ export const deletePreferences = async (req: Request, res: Response) => {
       where: { userId },
     });
 
-    res.json({ message: "Préférences supprimées." });
+    return res.json({ message: "Préférences supprimées." });
   } catch (e) {
     console.error("Erreur deletePreferences:", e);
-    res
+    return res
       .status(500)
       .json({ message: "Erreur lors de la suppression des préférences." });
   }
@@ -121,7 +117,6 @@ export const deletePreferences = async (req: Request, res: Response) => {
 
 /**
  * POST /preferences/upsert/:userId
- * Crée ou met à jour automatiquement les préférences
  */
 export const upsertPreferences = async (req: Request, res: Response) => {
   const { userId } = req.params;
@@ -139,9 +134,11 @@ export const upsertPreferences = async (req: Request, res: Response) => {
       },
     });
 
-    res.json(pref);
+    return res.json(pref);
   } catch (e) {
     console.error("Erreur upsertPreferences:", e);
-    res.status(500).json({ message: "Erreur lors de l'opération upsert." });
+    return res
+      .status(500)
+      .json({ message: "Erreur lors de l'opération upsert." });
   }
 };
