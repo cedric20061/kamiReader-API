@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "../../main";
+import app from "../../app";
 import * as browserService from "@services/initBrowser";
 import * as pageService from "@services/initPage";
 import * as closeService from "@services/closeBrowser";
@@ -9,6 +9,17 @@ import { SCRAPER_SOURCES } from "@lib/scraperConfig";
 jest.mock("@services/initBrowser");
 jest.mock("@services/initPage");
 jest.mock("@services/closeBrowser");
+jest.mock("@lib/auth", () => ({
+  auth: {
+    verifyRequest: jest.fn(() => Promise.resolve({ userId: "test-user" })),
+    signIn: jest.fn(),
+    signUp: jest.fn(),
+  }
+}));
+
+jest.mock("better-auth/node", () => ({
+  toNodeHandler: jest.fn(() => (req, res, next) => next()),
+}));
 
 describe("Scraper API", () => {
   const mockPage = {
