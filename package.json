@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/main.js",
+    "test": "jest",
     "dev": "ts-node-dev --respawn --loader ts-node/esm main.mts"
   },
   "author": "",
@@ -33,6 +34,8 @@
     "@services": "dist/src/services"
   },
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.5",
     "@types/jest": "^30.0.0",
     "@types/module-alias": "^2.0.4",

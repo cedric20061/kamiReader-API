@@ -27,6 +27,6 @@
       "@services/*": ["src/services/*"]
     }
   },
-  "include": ["src/**/*", "main.ts", "types.ts"],
+  "include": ["src/**/*", "app.ts", "main.ts", "types.ts"],
   "exclude": ["node_modules", "dist"]
 }

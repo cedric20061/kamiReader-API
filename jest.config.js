@@ -8,11 +8,12 @@ module.exports = {
   transform: {
     ...tsJestTransformCfg,
   },
-   moduleNameMapper: {
-    '^@routes/(.*)$': '<rootDir>/src/routes/$1',
-    '^@controllers/(.*)$': '<rootDir>/src/controllers/$1',
-    '^@services/(.*)$': '<rootDir>/src/services/$1',
-    '^@lib/(.*)$' : '<rootDir>/src/lib/$1',
-    '^@config/(.*)$': '<rootDir>/src/config/$1',
+  moduleNameMapper: {
+    "^@routes/(.*)$": "<rootDir>/src/routes/$1",
+    "^@controllers/(.*)$": "<rootDir>/src/controllers/$1",
+    "^@services/(.*)$": "<rootDir>/src/services/$1",
+    "^@lib/(.*)$": "<rootDir>/src/lib/$1",
+    "^@config/prisma$": "<rootDir>/src/__mocks__/prisma.ts",
+    "^@config/(.*)$": "<rootDir>/src/config/$1",
   },
 };
