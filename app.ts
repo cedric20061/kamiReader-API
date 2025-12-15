@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import mangasRoutes from "@routes/mangasRoutes";
 import cors from "cors";
-import { toNodeHandler } from "better-auth/node";
+// import { toNodeHandler } from "better-auth/node";
 import { auth } from "@lib/auth";
 dotenv.config();
 
@@ -27,7 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 
-app.all("/api/auth/*", toNodeHandler(auth));
+// app.all("/api/auth/*", toNodeHandler(auth));
 app.use(
   cors({
     origin: process.env.HOST_NAME,
